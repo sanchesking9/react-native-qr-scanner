@@ -43,7 +43,7 @@ export default class QRScanner extends PureComponent {
     translucent: false,
     isRepeatScan: false
   }
-  
+
   render() {
     return (
       <View style={{
@@ -53,9 +53,10 @@ export default class QRScanner extends PureComponent {
          style={{
           flex: 1
         }}
+        captureAudio={false}
           onBarCodeRead={this._handleBarCodeRead}
           barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
-          flashMode={!this.props.flashMode ? RNCamera.Constants.FlashMode.off : RNCamera.Constants.FlashMode.torch} 
+          flashMode={!this.props.flashMode ? RNCamera.Constants.FlashMode.off : RNCamera.Constants.FlashMode.torch}
           zoom={this.props.zoom}>
           <View style={[styles.topButtonsContainer, this.props.topViewStyle]}>
             {this.props.renderTopView()}
