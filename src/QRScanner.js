@@ -50,13 +50,15 @@ export default class QRScanner extends PureComponent {
         flex: 1
       }}>
         <RNCamera
-         style={{
-          flex: 1
-        }}
-        captureAudio={false}
-          onBarCodeRead={this._handleBarCodeRead}
-          barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
+          style={{
+            flex: 1
+          }}
+          // onBarCodeRead={this._handleBarCodeRead}
+          // barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
+          captureAudio={false}
           flashMode={!this.props.flashMode ? RNCamera.Constants.FlashMode.off : RNCamera.Constants.FlashMode.torch}
+          onGoogleVisionBarcodesDetected={this._handleBarCodeRead}
+          googleVisionBarcodeType={RNCamera.Constants.GoogleVisionBarcodeDetection.BarcodeType.QR_CODE}
           zoom={this.props.zoom}>
           <View style={[styles.topButtonsContainer, this.props.topViewStyle]}>
             {this.props.renderTopView()}
@@ -153,7 +155,7 @@ export default class QRScanner extends PureComponent {
     //   }
     // }
 
-     // 以下是不限制扫描区域
+    // 以下是不限制扫描区域
     if (this.props.isRepeatScan) {
       Vibration.vibrate();
       this.props.onRead(e)
@@ -167,9 +169,12 @@ export default class QRScanner extends PureComponent {
   }
 
   _handleBarCodeRead = (e) => {
+    if (!e.barcodes || e.barcodes.length === 0) {
+      return;
+    }
     switch (Platform.OS) {
       case 'ios':
-    this.iosBarCode(e);
+        this.iosBarCode(e);
         break;
       case 'android':
         this.androidBarCode(e);
