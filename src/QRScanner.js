@@ -45,6 +45,16 @@ export default class QRScanner extends PureComponent {
   }
 
   render() {
+    let qrHandlersProps = {
+      onGoogleVisionBarcodesDetected: this._handleBarCodeRead,
+      googleVisionBarcodeType: RNCamera.Constants.GoogleVisionBarcodeDetection.BarcodeType.QR_CODE
+    };
+    if (Platform.OS === 'ios') {
+      qrHandlersProps = {
+        onBarCodeRead: this._handleBarCodeRead,
+        barCodeTypes: [RNCamera.Constants.BarCodeType.qr]
+      };
+    }
     return (
       <View style={{
         flex: 1
@@ -53,12 +63,9 @@ export default class QRScanner extends PureComponent {
           style={{
             flex: 1
           }}
-          // onBarCodeRead={this._handleBarCodeRead}
-          // barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
           captureAudio={false}
           flashMode={!this.props.flashMode ? RNCamera.Constants.FlashMode.off : RNCamera.Constants.FlashMode.torch}
-          onGoogleVisionBarcodesDetected={this._handleBarCodeRead}
-          googleVisionBarcodeType={RNCamera.Constants.GoogleVisionBarcodeDetection.BarcodeType.QR_CODE}
+          {...qrHandlersProps}
           zoom={this.props.zoom}>
           <View style={[styles.topButtonsContainer, this.props.topViewStyle]}>
             {this.props.renderTopView()}
@@ -169,7 +176,7 @@ export default class QRScanner extends PureComponent {
   }
 
   _handleBarCodeRead = (e) => {
-    if (!e.barcodes || e.barcodes.length === 0) {
+    if ((!e.barcodes || e.barcodes.length === 0) && Platform.OS !== 'ios') {
       return;
     }
     switch (Platform.OS) {
