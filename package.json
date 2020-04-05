@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/shifeng1993/react-native-qr-scanner"
+    "url": "https://github.com/sanchesking9/react-native-qr-scanner"
   },
   "devDependencies": {
     "react": ">=15.0.0",
